@@ -8,19 +8,19 @@ import session from "express-session";
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// These two lines are crucial for Vercel to find your folders
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = e();
 
-// Use path.join so Vercel knows exactly where your files are
-app.use(e.static(path.join(__dirname, 'public')));
-app.set('views', path.join(__dirname, 'views'));
+// 1. PATH FIX: This ensures Vercel sees the views and public folders
+const viewsPath = path.join(__dirname, 'views');
+app.set('views', viewsPath);
 app.set('view engine', 'ejs');
+app.use(e.static(path.join(__dirname, 'public')));
 
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'fallbacksecret',
+  secret: process.env.SESSION_SECRET || 'supersecretkey',
   resave: false,
   saveUninitialized: false
 }));
@@ -28,17 +28,16 @@ app.use(session({
 app.use(e.urlencoded({ extended: true }));
 app.use(e.json());
 
-// Connecting to DB using .then() to prevent the server from hanging
+// 2. DB CONNECTION: plumberSite is the correct DB name
 mongoose.connect(process.env.DB_URL, {
-    dbName: "plumberSite"
+    dbName: "plumberSite",
 }).then(() => {
-    console.log("____connected to mongo________");
+    console.log("Connected to MongoDB");
 }).catch(err => {
-    console.log("DB Connection Error:", err);
+    console.log("MongoDB Error:", err);
 });
 
-// This covers all the routes you defined in your router file
+// 3. ROUTER: Ensure this comes AFTER all app.set/app.use
 app.use("/", router);
 
-// EXTREMELY IMPORTANT: Vercel needs this export to work
 export default app;
