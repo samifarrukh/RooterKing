@@ -98,40 +98,32 @@ router.post("/booking", async (req,resp)=>{
 
 router.get("/dashboard", async (req, resp) => {
   try {
-    // 1. SESSION CHECK: Ensure only you (the owner) can see this
+    // 1. Session Check
     if (!req.session.user) {
-      console.log("Access Denied: No User Session");
       return resp.redirect("/login");
     }
 
-    // 2. DATABASE HANDSHAKE: This prevents the 'Status 2' crash
-    // If we aren't connected (Status 1), we wait for the connection to finish
+    // 2. The "Status 0" Fix
+    // If disconnected (0) or connecting (2), we MUST await a fresh connection
     if (mongoose.connection.readyState !== 1) {
-      console.log("DB Status is " + mongoose.connection.readyState + ". Waiting for connection...");
+      console.log(`DB Status is ${mongoose.connection.readyState}. Fixing connection...`);
       await mongoose.connect(process.env.DB_URL, { 
-        dbName: "plumberSite" 
+        dbName: "plumberSite",
+        serverSelectionTimeoutMS: 5000 // Give up after 5 seconds instead of hanging
       });
-      console.log("Successfully connected to MongoDB for dashboard query.");
+      console.log("Database successfully reconnected!");
     }
 
-    // 3. FETCH DATA: Get all plumbing requests from MongoDB
-    // We use allBookings as a variable name to avoid confusion with the model
+    // 3. Fetch Data
     const allBookings = await Booking.find().sort({ createdAt: -1 });
-    console.log(`Successfully fetched ${allBookings.length} bookings.`);
-
-    // 4. RENDER: Send the data to your dashboard.ejs file
+    
     resp.render("dashboard", {
       booking: allBookings
     });
 
   } catch (error) {
-    // This will show exactly what went wrong in your Vercel logs
-    console.error("CRITICAL DASHBOARD ERROR:", {
-      message: error.message,
-      stack: error.stack
-    });
-
-    // We send a 500 status so you know the server had an issue
+    console.error("CRITICAL DASHBOARD ERROR:", error.message);
+    // If it fails, we show the error so you can see it on the screen
     resp.status(500).send("System Error: " + error.message);
   }
 });
