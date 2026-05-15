@@ -43,4 +43,5 @@ app.get("/logout",router);
 app.post("/booking",router);
 app.post("/delete/:id",router);
 app.post("/status/:id",router);
-app.listen(4000)
+app.listen(4000);
+export default app;
