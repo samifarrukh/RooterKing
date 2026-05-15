@@ -190,7 +190,7 @@
 
                                 <!-- STATUS & ACTIONS -->
                                 <div class="w-full xl:w-72 shrink-0 flex flex-col gap-4">
-                                    <form action="/status/<%= booking.id %>" method="POST" class="w-full">
+                                    <form action="/status/<%= booking._id %>" method="POST" class="w-full">
                                         <select name="status" onchange="this.form.submit()" 
                                             class="appearance-none status-pill cursor-pointer border-2 transition-all outline-none focus:ring-8 focus:ring-blue-500/5
                                             <%= booking.status === 'Pending' ? 'bg-amber-50 font-bold text-amber-700 border-amber-200' : '' %>
@@ -205,7 +205,7 @@
                                         <button class="flex-1 h-14 bg-slate-50 text-slate-500 font-black text-[10px] uppercase tracking-widest rounded-2xl hover:bg-slate-100 transition-colors">
                                             View Logs
                                         </button>
-                                        <form action="/delete/<%= booking.id %>" method="POST" onsubmit="return confirm('Archive this request?')" class="shrink-0">
+                                        <form action="/delete/<%= booking._id %>" method="POST" onsubmit="return confirm('Archive this request?')" class="shrink-0">
                                             <button type="submit" class="h-14 w-14 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center hover:bg-red-100 transition-all active:scale-90">
                                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                             </button>
