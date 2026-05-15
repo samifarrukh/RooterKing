@@ -13,7 +13,7 @@ router.post("/login",(req,resp)=>{
         req.session.user = username;
         return resp.redirect("/dashboard")
        }
-        return res.render("login", {
+        return resp.render("login", {
         error: "❌ Invalid username or password"
     });
     } catch (error) {
