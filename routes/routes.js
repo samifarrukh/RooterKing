@@ -95,18 +95,43 @@ router.post("/booking", async (req,resp)=>{
   }
 })
 
-router.get("/dashboard", async (req,resp)=>{
+router.get("/dashboard", async (req, resp) => {
   try {
+    // 1. Check Session
     if (!req.session.user) {
+      console.log("Dashboard Access Denied: No User Session");
       return resp.redirect("/login");
     }
-    const booking = await Booking.find().sort({createdAt : -1});
-    resp.render("dashboard",{
-      booking
-    })
+
+    // 2. Check Database State
+    const dbStatus = mongoose.connection.readyState;
+    // 0 = disconnected, 1 = connected, 2 = connecting, 3 = disconnecting
+    console.log("Database Connection Status:", dbStatus);
+
+    if (dbStatus !== 1) {
+      throw new Error("Database not connected. Status: " + dbStatus);
+    }
+
+    // 3. Fetch Data
+    const allBookings = await Booking.find().sort({ createdAt: -1 });
+    console.log(`Successfully fetched ${allBookings.length} bookings.`);
+
+    // 4. Render
+    resp.render("dashboard", {
+      booking: allBookings
+    });
+
   } catch (error) {
-      console.log(error);
-    resp.send("Error loading dashboard");
+    // THIS IS THE LINE THAT SHOWS THE ERROR IN VERCEL LOGS
+    console.error("CRITICAL DASHBOARD ERROR:", {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
+
+    resp.status(500).render("login", { 
+      error: "System Error: " + error.message 
+    });
   }
 });
 
