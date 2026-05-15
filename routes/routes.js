@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import e from "express";
 const router = e.Router();
 import Booking from "../models/plumber.js";
