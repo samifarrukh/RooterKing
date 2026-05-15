@@ -98,41 +98,41 @@ router.post("/booking", async (req,resp)=>{
 
 router.get("/dashboard", async (req, resp) => {
   try {
-    // 1. Check Session
+    // 1. SESSION CHECK: Ensure only you (the owner) can see this
     if (!req.session.user) {
-      console.log("Dashboard Access Denied: No User Session");
+      console.log("Access Denied: No User Session");
       return resp.redirect("/login");
     }
 
-    // 2. Check Database State
-    const dbStatus = mongoose.connection.readyState;
-    // 0 = disconnected, 1 = connected, 2 = connecting, 3 = disconnecting
-    console.log("Database Connection Status:", dbStatus);
-
-    if (dbStatus !== 1) {
-      throw new Error("Database not connected. Status: " + dbStatus);
+    // 2. DATABASE HANDSHAKE: This prevents the 'Status 2' crash
+    // If we aren't connected (Status 1), we wait for the connection to finish
+    if (mongoose.connection.readyState !== 1) {
+      console.log("DB Status is " + mongoose.connection.readyState + ". Waiting for connection...");
+      await mongoose.connect(process.env.DB_URL, { 
+        dbName: "plumberSite" 
+      });
+      console.log("Successfully connected to MongoDB for dashboard query.");
     }
 
-    // 3. Fetch Data
+    // 3. FETCH DATA: Get all plumbing requests from MongoDB
+    // We use allBookings as a variable name to avoid confusion with the model
     const allBookings = await Booking.find().sort({ createdAt: -1 });
     console.log(`Successfully fetched ${allBookings.length} bookings.`);
 
-    // 4. Render
+    // 4. RENDER: Send the data to your dashboard.ejs file
     resp.render("dashboard", {
       booking: allBookings
     });
 
   } catch (error) {
-    // THIS IS THE LINE THAT SHOWS THE ERROR IN VERCEL LOGS
+    // This will show exactly what went wrong in your Vercel logs
     console.error("CRITICAL DASHBOARD ERROR:", {
       message: error.message,
-      stack: error.stack,
-      name: error.name
+      stack: error.stack
     });
 
-    resp.status(500).render("login", { 
-      error: "System Error: " + error.message 
-    });
+    // We send a 500 status so you know the server had an issue
+    resp.status(500).send("System Error: " + error.message);
   }
 });
 
