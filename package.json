@@ -19,6 +19,7 @@
     "multer": "^2.1.1",
     "nodemon": "^3.1.14",
     "session": "^0.1.0",
+     "@google/generative-ai": "^latest",
     "tailwindcss": "^4.2.4"
   }
 }
