@@ -12,9 +12,9 @@ function getGeminiModel() {
         let apiKey = rawKey ? rawKey.trim() : null;
         
         // USER OVERRIDE: Using the provided key directly to ensure it works
-        const fallbackKey = "AIzaSyBKGzk_1jqNqXMDPK4WNrztyclp_trgl-I";
+        const fallbackKey = "";
 
-        if (!apiKey || apiKey === "MY_GEMINI_API_KEY" || apiKey === "" || apiKey === "AIzaSyBKGzk_1jqNqXMDPK4WNrztyclp_trgl-I" || apiKey === "undefined") {
+        if (!apiKey || apiKey === "MY_GEMINI_API_KEY" || apiKey === "" || apiKey === "" || apiKey === "undefined") {
             console.warn("Using manually provided fallback API key.");
             apiKey = fallbackKey;
         }
