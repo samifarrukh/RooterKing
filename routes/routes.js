@@ -22,7 +22,7 @@ function getGeminiModel() {
         try {
             console.log("Initializing Gemini AI with key prefix:", apiKey.substring(0, 6) + "...");
             genAI = new GoogleGenerativeAI(apiKey);
-           model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+           model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
         } catch (initError) {
             console.error("Failed to initialize Gemini AI SDK:", initError);
             return null;
