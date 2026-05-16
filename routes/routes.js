@@ -3,7 +3,6 @@ import e from "express";
 const router = e.Router();
 import Booking from "../models/plumber.js";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-
 let genAI = null;
 let model = null;
 
@@ -23,7 +22,7 @@ function getGeminiModel() {
         try {
             console.log("Initializing Gemini AI with key prefix:", apiKey.substring(0, 6) + "...");
             genAI = new GoogleGenerativeAI(apiKey);
-            model = genAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
+           model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
         } catch (initError) {
             console.error("Failed to initialize Gemini AI SDK:", initError);
             return null;
@@ -168,51 +167,7 @@ router.get("/debug-ai", (req, res) => {
     res.render("debug-ai");
 });
 
-router.get("/api/debug-ai", async (req, res) => {
-    const rawKey = process.env.GEMINI_API_KEY;
-    const fallbackKey = "AIzaSyBKGzk_1jqNqXMDPK4WNrztyclp_trgl-I";
-    let apiKey = (rawKey && rawKey !== "undefined") ? rawKey.trim() : null;
 
-    if (!apiKey || apiKey === "MY_GEMINI_API_KEY" || apiKey === "" || apiKey === "PASTE_YOUR_KEY") {
-        apiKey = fallbackKey; // Use user provided key for debug too
-    }
-
-    const data = {
-        success: false,
-        envExists: (apiKey === fallbackKey) ? "FIXED (Hardcoded)" : true,
-        keyPrefix: apiKey.substring(0, 6),
-        keyLength: apiKey.length,
-        sdkInit: false,
-        aiResponse: "",
-        error: ""
-    };
-
-    try {
-        // Step 2: SDK Init
-        const testGenAI = new GoogleGenerativeAI(apiKey);
-        const testModel = testGenAI.getGenerativeModel({ model: "gemini-3-flash-preview" });
-        data.sdkInit = true;
-
-        // Step 3: Test Generation
-        const testPrompt = "Respond with only one word: ONLINE";
-        const result = await testModel.generateContent(testPrompt);
-        const response = await result.response;
-        data.aiResponse = response.text().trim();
-        
-        if (data.aiResponse.toUpperCase().includes("ONLINE")) {
-            data.success = true;
-        } else {
-            data.error = "Model returned unexpected response: " + data.aiResponse;
-        }
-
-    } catch (err) {
-        console.error("Detailed Debug AI Error:", err);
-        data.error = err.message || "Unknown error";
-        data.aiResponse = "ERROR: " + (err.message || "Check server logs");
-    }
-
-    res.json(data);
-});
 
 router.post("/api/chat", async (req, res) => {
   try {
