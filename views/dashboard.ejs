@@ -22,16 +22,16 @@
             border-color: #cbd5e1;
             z-index: 10;
         }
-        .status-pill {
-            font-size: 11px;
-            font-weight: 800;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            padding: 1rem 1.5rem;
-            border-radius: 1rem;
-            width: 100%;
-            text-align: center;
-        }
+   .status-pill {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.75rem 1rem;
+    border-radius: 1rem;
+    width: 100%;
+    text-align: center;
+}
         .message-card {
             background: #f8fafc;
             border: 1px solid #eff2f5;
@@ -48,10 +48,10 @@
     </style>
 </head>
 <body class="bg-[#F4F7FB] text-[#1e293b]">
-    <div class="flex h-screen overflow-hidden">
+   <div class="flex min-h-screen overflow-x-hidden">
         
         <!-- Sidebar: Premium Stealth -->
-        <aside class="hidden lg:flex flex-col w-50 bg-[#0a0f1d] text-white">
+        <aside class="hidden lg:flex flex-col w-56 bg-[#0a0f1d] text-white">
             <div class="p-10 pb-16">
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 bg-cyan-400 rounded-2xl flex items-center justify-center text-[#0a0f1d] shadow-lg shadow-cyan-500/20">
@@ -90,7 +90,7 @@
         <!-- Main Content -->
         <main class="flex-1 flex flex-col min-w-0 overflow-hidden">
             <!-- Header bar -->
-            <header class="h-18 bg-[#0f4392] flex items-center justify-between px-12 text-white relative z-20 shadow-[0_10px_30px_rgba(15,67,146,0.2)]">
+            <header class="h-18 bg-[#0f4392] flex items-center justify-between px-4 sm:px-8 lg:px-12 text-white">
                 <div class="flex flex-col">
                     <h1 class="text-2xl font-black uppercase italic tracking-tighter leading-none mt-1 mb-2">Live Orders</h1>
                     <div class="flex items-center gap-3">
@@ -108,10 +108,10 @@
             </header>
 
             <!-- Dashboard Content -->
-            <div class="flex-1 overflow-y-auto p-12 lg:p-16 space-y-12">
+          <div class="flex-1 overflow-y-auto p-4 sm:p-8 lg:p-16 space-y-8 lg:space-y-12">
                 
                 <!-- Quick Stats -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-10">
                     <div class="bg-white p-10 rounded-[2.5rem] shadow-sm border border-blue-200 flex justify-between items-center group  hover:border-blue-500  hover:border-4 transition-colors">
                         <div >
                             <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 block">New Enquiries</span>
@@ -156,12 +156,12 @@
 
                     <div class="space-y-6">
                         <% booking.forEach(booking => { %>
-                            <div class="card-row rounded-[2.5rem] p-10 flex flex-col xl:flex-row items-center gap-12">
+                          <div class="card-row rounded-[2.5rem] p-6 sm:p-8 lg:p-10 flex flex-col lg:flex-row items-center gap-12">
                                 <!-- CUSTOMER INFO -->
-                                <div class="flex items-center gap-8 w-full xl:w-1/4 shrink-0">
+                            <div class="flex items-center gap-6 w-full lg:w-1/3 shrink-0">
                                     
                                     <div class="min-w-0">
-                                        <h3 class="text-2xl font-black text-slate-900 tracking-tight leading-none mb-3"><%= booking.name %></h3>
+                                        <h3 class="text-2xl font-black break-words text-slate-900 tracking-tight leading-none mb-3"><%= booking.name %></h3>
                                         <div class="flex flex-col gap-1.5">
                                             <a href="tel:<%= booking.phone %>" class="flex items-center gap-2 text-blue-600 font-extrabold text-[15px] hover:underline">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 5.5A2.5 2.5 0 015.5 3h1.872a2.5 2.5 0 012.428 1.902l.602 2.406a2.5 2.5 0 01-.64 2.21l-1.352 1.352a12.047 12.047 0 005.293 5.293l1.352-1.352a2.5 2.5 0 012.21-.64l2.406.602a2.5 2.5 0 011.902 2.428V18.5a2.5 2.5 0 01-2.5 2.5h-1a15 15 0 01-15-15v-1z" stroke-width="2.5"/></svg>
@@ -189,7 +189,7 @@
                                 </div>
 
                                 <!-- STATUS & ACTIONS -->
-                                <div class="w-full xl:w-72 shrink-0 flex flex-col gap-4">
+                              <div class="w-full lg:w-64 shrink-0 flex flex-col gap-4">
                                     <form action="/status/<%= booking._id %>" method="POST" class="w-full">
                                         <select name="status" onchange="this.form.submit()" 
                                             class="appearance-none status-pill cursor-pointer border-2 transition-all outline-none focus:ring-8 focus:ring-blue-500/5
