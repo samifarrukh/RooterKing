@@ -83,19 +83,19 @@ router.get('/services', (req, res) => {
     {
       title: 'Emergency Plumbing',
       description: '24/7 rapid response for burst pipes, flooding, or severe leaks. We arrive within 60 minutes.',
-      image: '/images/Gemini_Generated_Image_x7my22x7my22x7my.png',
+      image: '/images/service1.jpg',
       features: ['24/7 Response', 'Priority Dispatch', 'Damage Control']
     },
     {
       title: 'Drain Cleaning',
       description: 'High-pressure water jetting and fiber-optic camera inspections to clear even the toughest clogs.',
-      image: '/images/Gemini_Generated_Image_lwo6jnlwo6jnlwo6.png',
+      image: '/images/service2.jpg',
       features: ['CCTV Inspections', 'Root Removal', 'Hydro-Jetting']
     },
     {
       title: 'Water Heaters',
       description: 'Full installation and repair services for electric, gas, and tankless water heating systems.',
-      image: '/images/Gemini_Generated_Image_5wr3615wr3615wr3.png',
+      image: '/images/service3.jpg',
       features: ['Tankless Systems', 'Gas & Electric', 'Efficiency Upgrades']
     }
   ];
