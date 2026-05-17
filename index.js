@@ -34,26 +34,31 @@ app.use(
   })
 );
 
-/* ---------------- SAFE MONGODB CONNECT (IMPORTANT FIX) ---------------- */
-let isConnected = false;
+/* ---------------- MONGODB (FIXED FOR VERCEL) ---------------- */
+let cached = global.mongoose;
+
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
 
 const connectDB = async () => {
-  if (isConnected) return;
+  if (cached.conn) return cached.conn;
 
-  try {
-    await mongoose.connect(process.env.DB_URL, {
+  if (!cached.promise) {
+    cached.promise = mongoose.connect(process.env.DB_URL, {
       dbName: "plumberSite",
-      serverSelectionTimeoutMS: 5000,
+      bufferCommands: false,
     });
-
-    isConnected = true;
-    console.log("Connected to MongoDB");
-  } catch (err) {
-    console.log("MongoDB Error:", err.message);
   }
+
+  cached.conn = await cached.promise;
+  return cached.conn;
 };
 
-connectDB();
+/* Connect DB once */
+connectDB()
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.log("MongoDB Error:", err.message));
 
 /* ---------------- ROUTES ---------------- */
 app.use("/", router);
