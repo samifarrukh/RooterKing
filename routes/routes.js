@@ -223,4 +223,51 @@ router.post("/api/chat", async (req, res) => {
   }
 });
 
+
+// sampele code 
+
+
+router.get("/test-db", async (req, res) => {
+  try {
+    // check mongoose state first
+    const state = mongoose.connection.readyState;
+
+    const states = {
+      0: "DISCONNECTED",
+      1: "CONNECTED",
+      2: "CONNECTING",
+      3: "DISCONNECTING"
+    };
+
+    // if not connected, show clear error immediately
+    if (state !== 1) {
+      return res.status(500).json({
+        success: false,
+        message: "MongoDB not connected",
+        state: states[state],
+        hint: "Check DB_URL on Vercel"
+      });
+    }
+
+    // try ping DB
+    const result = await mongoose.connection.db.admin().ping();
+
+    return res.status(200).json({
+      success: true,
+      message: "DB WORKING",
+      mongoState: states[state],
+      ping: result
+    });
+
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "DB ERROR",
+      error: err.message,
+      fullError: err
+    });
+  }
+});
+
+
 export default router;
