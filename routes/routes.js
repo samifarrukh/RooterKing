@@ -102,27 +102,28 @@ router.get('/services', (req, res) => {
   res.render('service', { title: 'Our Professional Plumbing Services', services });
 });
 
-router.post("/booking", async (req,resp)=>{
+router.post("/booking", async (req, res) => {
   try {
-     const { name, email, phone, service, message } = req.body;
+    await mongoose.connection.asPromise(); // ensures connection is ready
 
-    const newBooking = new Booking({
-        name,
-        email,
-        phone,
-        service,
-        message,
-        status: "Pending" // ✅ DEFAULT FIX
+    const { name, email, phone, service, message } = req.body;
+
+    await Booking.create({
+      name,
+      email,
+      phone,
+      service,
+      message,
+      status: "Pending",
     });
 
-    await newBooking.save();
-    resp.redirect('/contact?success=true')
-  
+    res.redirect("/contact?success=true");
+
   } catch (error) {
-      console.log(error);
-    resp.send("Error saving booking");
+    console.log("BOOKING ERROR:", error);
+    res.status(500).send("Error saving booking: " + error.message);
   }
-})
+});
 
 router.get("/dashboard", async (req, resp) => {
   try {
