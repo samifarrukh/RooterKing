@@ -34,7 +34,7 @@ app.use(
   })
 );
 
-/* ---------------- MONGODB (FIXED FOR VERCEL) ---------------- */
+/* ---------------- MONGODB CACHE FIX (Vercel SAFE) ---------------- */
 let cached = global.mongoose;
 
 if (!cached) {
@@ -47,21 +47,23 @@ const connectDB = async () => {
   if (!cached.promise) {
     cached.promise = mongoose.connect(process.env.DB_URL, {
       dbName: "plumberSite",
-      bufferCommands: false,
+      serverSelectionTimeoutMS: 10000,
     });
   }
 
-  cached.conn = await cached.promise;
-  return cached.conn;
+  try {
+    cached.conn = await cached.promise;
+    console.log("Connected to MongoDB");
+    return cached.conn;
+  } catch (err) {
+    console.log("MongoDB Error:", err.message);
+  }
 };
 
-/* Connect DB once */
-connectDB()
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.log("MongoDB Error:", err.message));
+/* IMPORTANT: start DB connection */
+connectDB();
 
 /* ---------------- ROUTES ---------------- */
 app.use("/", router);
 
-/* ---------------- EXPORT ---------------- */
 export default app;
