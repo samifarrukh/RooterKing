@@ -104,7 +104,13 @@ router.get('/services', (req, res) => {
 
 router.post("/booking", async (req, res) => {
   try {
-    await mongoose.connection.asPromise(); // ensures connection is ready
+    // 🔥 FORCE SAFE CONNECTION
+    if (mongoose.connection.readyState !== 1) {
+      await mongoose.connect(process.env.DB_URL, {
+        dbName: "plumberSite",
+        serverSelectionTimeoutMS: 15000,
+      });
+    }
 
     const { name, email, phone, service, message } = req.body;
 
@@ -117,11 +123,11 @@ router.post("/booking", async (req, res) => {
       status: "Pending",
     });
 
-    res.redirect("/contact?success=true");
+    return res.redirect("/contact?success=true");
 
   } catch (error) {
-    console.log("BOOKING ERROR:", error);
-    res.status(500).send("Error saving booking: " + error.message);
+    console.log("BOOKING ERROR:", error.message);
+    return res.status(500).send("Error saving booking");
   }
 });
 
