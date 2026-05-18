@@ -89,13 +89,13 @@ router.get('/services', (req, res) => {
     {
       title: 'Drain Cleaning',
       description: 'High-pressure water jetting and fiber-optic camera inspections to clear even the toughest clogs.',
-      image: '/images/service2.5.jpg',
+      image: '/images/service2.jpg',
       features: ['CCTV Inspections', 'Root Removal', 'Hydro-Jetting']
     },
     {
       title: 'Water Heaters',
       description: 'Full installation and repair services for electric, gas, and tankless water heating systems.',
-      image: '/images/project1.jpg',
+      image: '/images/service3.jpg',
       features: ['Tankless Systems', 'Gas & Electric', 'Efficiency Upgrades']
     }
   ];
