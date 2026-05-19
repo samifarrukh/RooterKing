@@ -95,7 +95,7 @@ router.get('/services', (req, res) => {
     {
       title: 'Water Heaters',
       description: 'Full installation and repair services for electric, gas, and tankless water heating systems.',
-      image: '/images/service3.jpg',
+      image: '/images/water-heater.jpg',
       features: ['Tankless Systems', 'Gas & Electric', 'Efficiency Upgrades']
     }
   ];
