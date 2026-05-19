@@ -89,7 +89,7 @@ router.get('/services', (req, res) => {
     {
       title: 'Drain Cleaning',
       description: 'High-pressure water jetting and fiber-optic camera inspections to clear even the toughest clogs.',
-      image: '/images/service2.jpg',
+      image: '/images/pro2.jpg',
       features: ['CCTV Inspections', 'Root Removal', 'Hydro-Jetting']
     },
     {
